@@ -1,0 +1,3 @@
+Icons taken from materialdesignicons.com
+Source:		https://github.com/Templarian/MaterialDesign
+License:	https://github.com/Templarian/MaterialDesign/blob/master/license.txt

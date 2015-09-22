@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTrayWindow", "WPFTrayWindow\WPFTrayWindow.csproj", "{00CF3300-886D-4ADC-983E-17C3E674E4FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTrayWindow.TestApplication", "WPFTrayWindow.TestApplication\WPFTrayWindow.TestApplication.csproj", "{C515FAF8-AB5F-4764-AB58-21D2ED089ED0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{00CF3300-886D-4ADC-983E-17C3E674E4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00CF3300-886D-4ADC-983E-17C3E674E4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CF3300-886D-4ADC-983E-17C3E674E4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C515FAF8-AB5F-4764-AB58-21D2ED089ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C515FAF8-AB5F-4764-AB58-21D2ED089ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C515FAF8-AB5F-4764-AB58-21D2ED089ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C515FAF8-AB5F-4764-AB58-21D2ED089ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
