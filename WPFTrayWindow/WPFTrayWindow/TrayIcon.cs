@@ -18,7 +18,17 @@ namespace avalonprojects.wpf.tray
             trayicon = new System.Windows.Forms.NotifyIcon();
             trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/default.ico")).Stream,new System.Drawing.Size(16,16));
             trayicon.Visible = true;
+            trayicon.MouseClick += Trayicon_Click;
         }
+
+        private void Trayicon_Click(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if(e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                Invoked.Invoke();
+            }
+        }
+
 
         public bool Visible
         {
@@ -31,6 +41,8 @@ namespace avalonprojects.wpf.tray
             trayicon.Visible = false;
             trayicon.Dispose();
         }
+
+        public event Action Invoked = delegate { }; 
 
         
     }

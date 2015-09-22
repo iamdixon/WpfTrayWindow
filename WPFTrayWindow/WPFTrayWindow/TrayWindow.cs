@@ -15,8 +15,14 @@ namespace avalonprojects.wpf.tray
         public TrayWindow()
         {
             trayicon = new TrayIcon();
+
+            trayicon.Invoked += RaiseTrayIconClick;
+
             Application.Current.ShutdownMode = ShutdownMode.OnLastWindowClose;
             Application.Current.Exit += ApplicationShutdown;
+            this.Visibility = Visibility.Hidden;
+            
+            
         }
 
 
@@ -36,6 +42,24 @@ namespace avalonprojects.wpf.tray
             trayicon.Visible = false;
             trayicon.Dispose();
         }
+
+        public void RaiseTrayIconClick()
+        {
+
+            if (this.Visibility == Visibility.Visible)
+            {
+                this.Hide();
+            }
+            else
+            {
+
+                this.Show();
+                this.Activate();
+            }
+            
+
+        }
+
         #endregion
     }
 }
