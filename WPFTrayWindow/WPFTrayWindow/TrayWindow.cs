@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 
 
 namespace avalonprojects.wpf.tray
 {
+    
     public class TrayWindow : Window
     {
 
@@ -21,11 +23,53 @@ namespace avalonprojects.wpf.tray
             Application.Current.ShutdownMode = ShutdownMode.OnLastWindowClose;
             Application.Current.Exit += ApplicationShutdown;
             this.Visibility = Visibility.Hidden;
-            
-            
         }
 
 
+        private static readonly DependencyProperty TrayIconProperty = DependencyProperty.Register("TrayIcon", typeof(string), typeof(TrayWindow), new UIPropertyMetadata("",TrayIconPropertyChanged));
+        /// <summary>
+        /// Set the path to the resource to be used as the TrayIcon
+        /// </summary>
+        public string TrayIcon
+        {
+            get { return (string)this.GetValue(TrayIconProperty); }
+            set
+            {
+                this.SetValue(TrayIconProperty, value);
+            }
+        }
+        private static void TrayIconPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TrayWindow traywindow = d as TrayWindow;
+            try {
+                // try and set the icon based on the provided string
+                traywindow.trayicon.Icon = new System.Drawing.Icon(TryFindResource(e.NewValue as string), new System.Drawing.Size(16,16));
+            }
+            catch
+            {
+                // if loading the icon fails for any reason - set it back to WPFTrayWindow default
+                traywindow.trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/default.ico")).Stream, new System.Drawing.Size(16, 16));
+            }
+        }
+        /// <summary>
+        /// Attempt to create a stream for a specified resource path.
+        /// </summary>
+        /// <param name="path"></param>
+        private static Stream TryFindResource(String path)
+        {
+            // we need to try and find the resource by multiple paths as from the xaml we'll just be retrieving a path string.
+            // Probably need to expand this a bit, works with localcopy content or embedded resources.
+            try
+            {
+                // try and find an embedded resource.
+                return Application.GetResourceStream(new Uri(path)).Stream;
+            }
+            catch
+            {
+                // couldn't find an embedded resource, so lets try and find a copylocal file.
+                return System.IO.File.Open(path, FileMode.Open);
+            }
+        }
         #endregion
 
         #region Events
@@ -43,9 +87,8 @@ namespace avalonprojects.wpf.tray
             trayicon.Dispose();
         }
 
-        public void RaiseTrayIconClick()
+        private void RaiseTrayIconClick()
         {
-
             if (this.Visibility == Visibility.Visible)
             {
                 this.Hide();
@@ -56,10 +99,15 @@ namespace avalonprojects.wpf.tray
                 this.Show();
                 this.Activate();
             }
-            
-
         }
 
         #endregion
+
+        #region Public Methods
+
+        
+
+        #endregion
+
     }
 }
