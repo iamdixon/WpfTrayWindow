@@ -19,6 +19,7 @@ namespace avalonprojects.wpf.tray
             // create a new instance of a NotifyIcon to deal with the tray icon interactions
             trayicon = new System.Windows.Forms.NotifyIcon();
 
+            
 
             // TODO: use a transparent icon file, so that we don't see the default icon during init.
             trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/default.ico")).Stream,new System.Drawing.Size(16,16));
@@ -66,6 +67,8 @@ namespace avalonprojects.wpf.tray
         // trigger the Invoked delegate from the notify icon click event
         private void Trayicon_Click(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+
+            
             // only if its a left click - everything else we go to default except context (right click)
             if(e.Button == System.Windows.Forms.MouseButtons.Left)
             {
