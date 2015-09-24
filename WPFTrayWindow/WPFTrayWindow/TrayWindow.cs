@@ -26,6 +26,17 @@ namespace avalonprojects.wpf.tray
         }
 
 
+
+        private static readonly DependencyProperty PinToTrayProperty = DependencyProperty.Register("PinToTray", typeof(bool), typeof(TrayWindow), new UIPropertyMetadata(false));
+        public bool PinToTray
+        {
+            get { return (bool)this.GetValue(PinToTrayProperty); }
+            set
+            {
+                this.SetValue(PinToTrayProperty, value);
+            }
+        }
+
         private static readonly DependencyProperty TrayIconProperty = DependencyProperty.Register("TrayIcon", typeof(string), typeof(TrayWindow), new UIPropertyMetadata("",TrayIconPropertyChanged));
         /// <summary>
         /// Set the path to the resource to be used as the TrayIcon
@@ -95,7 +106,8 @@ namespace avalonprojects.wpf.tray
             }
             else
             {
-                PinToTray();
+                if(this.PinToTray)
+                    AttachToTray();
                 this.Show();
                 this.Activate();
             }
@@ -108,7 +120,7 @@ namespace avalonprojects.wpf.tray
         /// <summary>
         /// Position the window adjacent to the natification tray
         /// </summary>
-        public void PinToTray()
+        public void AttachToTray()
         {
             TaskbarPosition trayposition = TaskBar.Position;
 
