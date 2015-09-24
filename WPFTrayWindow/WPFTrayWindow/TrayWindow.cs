@@ -124,8 +124,8 @@ namespace avalonprojects.wpf.tray
         {
             TaskbarPosition trayposition = TaskBar.Position;
 
-            Left = (trayposition == TaskbarPosition.Left) ? TaskBar.Screen.WorkingArea.Left : TaskBar.Screen.WorkingArea.Right - Width;
-            Top = (trayposition == TaskbarPosition.Top) ? TaskBar.Screen.WorkingArea.Top : TaskBar.Screen.WorkingArea.Bottom - Height;
+            Left = (trayposition == TaskbarPosition.Left) ? TaskBar.Screen.WorkingArea.Left + this.Margin.Left : TaskBar.Screen.WorkingArea.Right - Width - this.Margin.Right;
+            Top = (trayposition == TaskbarPosition.Top) ? TaskBar.Screen.WorkingArea.Top + this.Margin.Top : TaskBar.Screen.WorkingArea.Bottom - Height - this.Margin.Bottom;
         }
 
         #endregion
