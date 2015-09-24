@@ -95,7 +95,7 @@ namespace avalonprojects.wpf.tray
             }
             else
             {
-
+                PinToTray();
                 this.Show();
                 this.Activate();
             }
@@ -105,7 +105,16 @@ namespace avalonprojects.wpf.tray
 
         #region Public Methods
 
-        
+        /// <summary>
+        /// Position the window adjacent to the natification tray
+        /// </summary>
+        public void PinToTray()
+        {
+            TaskbarPosition trayposition = TaskBar.Position;
+
+            Left = (trayposition == TaskbarPosition.Left) ? TaskBar.Screen.WorkingArea.Left : TaskBar.Screen.WorkingArea.Right - Width;
+            Top = (trayposition == TaskbarPosition.Top) ? TaskBar.Screen.WorkingArea.Top : TaskBar.Screen.WorkingArea.Bottom - Height;
+        }
 
         #endregion
 

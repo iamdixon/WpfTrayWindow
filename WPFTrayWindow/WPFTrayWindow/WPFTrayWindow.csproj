@@ -7,7 +7,7 @@
     <ProjectGuid>{00CF3300-886D-4ADC-983E-17C3E674E4FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>avalonprojects.wpf.traywindow</RootNamespace>
+    <RootNamespace>avalonprojects.wpf.tray</RootNamespace>
     <AssemblyName>WPFTrayWindow</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TaskBar.cs" />
     <Compile Include="TrayIcon.cs" />
     <Compile Include="TrayWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
