@@ -59,7 +59,7 @@ namespace avalonprojects.wpf.tray
             catch
             {
                 // if loading the icon fails for any reason - set it back to WPFTrayWindow default
-                traywindow.trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/default.ico")).Stream, new System.Drawing.Size(16, 16));
+                traywindow.trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/blank.ico")).Stream, new System.Drawing.Size(16, 16));
             }
         }
         /// <summary>

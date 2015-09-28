@@ -22,7 +22,7 @@ namespace avalonprojects.wpf.tray
             
 
             // TODO: use a transparent icon file, so that we don't see the default icon during init.
-            trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/default.ico")).Stream,new System.Drawing.Size(16,16));
+            trayicon.Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/WPFTrayWindow;component/Resources/blank.ico")).Stream,new System.Drawing.Size(16,16));
             // set the default state of the trayicon to visible
             trayicon.Visible = true;
 
