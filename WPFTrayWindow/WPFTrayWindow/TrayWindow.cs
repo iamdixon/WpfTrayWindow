@@ -106,8 +106,16 @@ namespace avalonprojects.wpf.tray
             }
             else
             {
-                if(this.PinToTray)
+
+
+                if (this.PinToTray)
+                {
                     AttachToTray();
+                }
+                else
+                {
+                    // Allow the window to display based on its normal position
+                }
                 this.Show();
                 this.Activate();
             }
@@ -124,8 +132,98 @@ namespace avalonprojects.wpf.tray
         {
             TaskbarPosition trayposition = TaskBar.Position;
 
-            Left = (trayposition == TaskbarPosition.Left) ? TaskBar.Screen.WorkingArea.Left + this.Margin.Left : TaskBar.Screen.WorkingArea.Right - Width - this.Margin.Right;
-            Top = (trayposition == TaskbarPosition.Top) ? TaskBar.Screen.WorkingArea.Top + this.Margin.Top : TaskBar.Screen.WorkingArea.Bottom - Height - this.Margin.Bottom;
+            try {
+                System.Drawing.Rectangle trayiconrectangle = trayicon.GetNotificationIconRectangle();
+                System.Drawing.Rectangle taskbarrectangle = TaskBar.TaskbarPositionRectangle;
+
+                double trayiconwidth = trayiconrectangle.Right - trayiconrectangle.Left ;
+                double trayiconheight = trayiconrectangle.Bottom - trayiconrectangle.Top;
+                double trayiconhorizontalcenter = trayiconwidth / 2;
+                double trayiconverticalcenter = trayiconheight / 2;
+
+                double windowwidth = this.Width + this.Margin.Left + this.Margin.Right;
+                double windowheight = this.Height + this.Margin.Top + this.Margin.Bottom;
+                double windowhorizontalcenter = windowwidth / 2;
+                double windowverticalcenter = windowheight / 2;
+
+                // is the icon inside the notification tray?
+                if (taskbarrectangle.Contains(trayiconrectangle))
+                {
+                    // inside the taskbar
+                    switch (trayposition)
+                    {
+                        case TaskbarPosition.Bottom:
+                            Top = TaskBar.Screen.WorkingArea.Bottom - Height - this.Margin.Bottom;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            // does the window (including its bottom margin fall off the end of the screen?
+                            if (Left + windowwidth > TaskBar.Screen.WorkingArea.Right)
+                                Left = TaskBar.Screen.WorkingArea.Right - Width - Margin.Right;
+                            break;
+                        case TaskbarPosition.Left:
+                            Top = (trayiconrectangle.Top + trayiconverticalcenter) - windowverticalcenter;
+                            Left = TaskBar.Screen.WorkingArea.Left + this.Margin.Left;
+                            // does the window (including its bottom margin fall off the end of the screen?
+                            if (Top + windowheight > TaskBar.Screen.WorkingArea.Bottom)
+                                Top = TaskBar.Screen.WorkingArea.Bottom - Height - Margin.Bottom;
+                            break;
+                        case TaskbarPosition.Right:
+                            Top = (trayiconrectangle.Top + trayiconverticalcenter) - windowverticalcenter;
+                            Left = TaskBar.Screen.WorkingArea.Right - Width - this.Margin.Right;
+                            // does the window (including its bottom margin fall off the end of the screen?
+                            if (Top + windowheight > TaskBar.Screen.WorkingArea.Bottom)
+                                Top = TaskBar.Screen.WorkingArea.Bottom - Height - Margin.Bottom;
+                            break;
+                        case TaskbarPosition.Top:
+                            Top = TaskBar.Screen.WorkingArea.Top + this.Margin.Top;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            // does the window (including its bottom margin fall off the end of the screen?
+                            if (Left + windowwidth > TaskBar.Screen.WorkingArea.Right)
+                                Left = TaskBar.Screen.WorkingArea.Right - Width - Margin.Right;
+                            break;
+                    }
+                }
+                else
+                {
+                    // inside the notification pop-out
+                    switch (trayposition)
+                    {
+                        case TaskbarPosition.Bottom:
+                            Top = trayiconrectangle.Top - this.Margin.Bottom - this.Height;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            if (Left + windowwidth > TaskBar.Screen.WorkingArea.Right)
+                                Left = TaskBar.Screen.WorkingArea.Right - Width - Margin.Right;
+                            break;
+                        case TaskbarPosition.Left:
+                            Top = trayiconrectangle.Top - this.Margin.Bottom - this.Height;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            if (Left < TaskBar.Screen.WorkingArea.Left)
+                                Left = TaskBar.Screen.WorkingArea.Left + Margin.Left;
+                            break;
+                        case TaskbarPosition.Right:
+                            Top = trayiconrectangle.Top - this.Margin.Bottom - this.Height;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            if (Left + windowwidth > TaskBar.Screen.WorkingArea.Right)
+                                Left = TaskBar.Screen.WorkingArea.Right - Width - Margin.Right;
+                            break;
+                        case TaskbarPosition.Top:
+                            Top = trayiconrectangle.Bottom + Margin.Top;
+                            Left = (trayiconrectangle.Right - trayiconhorizontalcenter) - windowverticalcenter;
+                            if (Left + windowwidth > TaskBar.Screen.WorkingArea.Right)
+                                Left = TaskBar.Screen.WorkingArea.Right - Width - Margin.Right;
+                            break;
+                    }
+                }
+
+            }
+            catch
+            {
+                // catchall pin it to the notification area instead of the icon
+                Left = (trayposition == TaskbarPosition.Left) ? TaskBar.Screen.WorkingArea.Left + this.Margin.Left : TaskBar.Screen.WorkingArea.Right - Width - this.Margin.Right;
+                Top = (trayposition == TaskbarPosition.Top) ? TaskBar.Screen.WorkingArea.Top + this.Margin.Top : TaskBar.Screen.WorkingArea.Bottom - Height - this.Margin.Bottom;
+            }
+
+            Topmost = true;
+
         }
 
         #endregion

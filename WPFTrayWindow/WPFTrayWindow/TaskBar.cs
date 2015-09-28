@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace avalonprojects.wpf.tray
@@ -16,7 +19,7 @@ namespace avalonprojects.wpf.tray
         /// <summary>
         /// Get a System.Drawing.Rectangle representation of the screen coordinates of the taskbar
         /// </summary>
-        private static Rectangle taskbarPositionRectangle
+        public static Rectangle TaskbarPositionRectangle
         {
             get
             {
@@ -40,7 +43,7 @@ namespace avalonprojects.wpf.tray
             get
             {
                 // get a System.Drawing.Rectangle representation of the taskbar coordinates
-                var rectangle = taskbarPositionRectangle;
+                var rectangle = TaskbarPositionRectangle;
                 // return the screen that contains the taskbar
                 return Screen.AllScreens.FirstOrDefault(x => x.Bounds.Contains(rectangle));
             }
@@ -51,7 +54,7 @@ namespace avalonprojects.wpf.tray
             get
             {
                 // work out which screen and where on that screen the taskbar is
-                var rectangle = taskbarPositionRectangle;
+                var rectangle = TaskbarPositionRectangle;
                 var screen = Screen;
 
                 // the taskbar is touching the top and bottom of the screen, thereby the taskbar is either positioned left or right
@@ -72,10 +75,33 @@ namespace avalonprojects.wpf.tray
                 return TaskbarPosition.Bottom;
             }
         }
+
+        public static Rectangle GetNotificationIconRectangle(NotifyIcon Icon)
+        {
+            FieldInfo idFieldInfo = Icon.GetType().GetField("id", BindingFlags.NonPublic | BindingFlags.Instance);
+            int iconid = (int)idFieldInfo.GetValue(Icon);
+
+            FieldInfo windowFieldInfo = Icon.GetType().GetField("window", BindingFlags.NonPublic | BindingFlags.Instance);
+            System.Windows.Forms.NativeWindow nativeWindow = (System.Windows.Forms.NativeWindow)windowFieldInfo.GetValue(Icon);
+            IntPtr iconHandle = nativeWindow.Handle;
+
+            RECT rect = new RECT();
+            NOTIFYICONIDENTIFIER nid = new NOTIFYICONIDENTIFIER()
+            {
+                hWnd = iconHandle,
+                uID = (uint)iconid
+            };
+            nid.cbSize = (uint)Marshal.SizeOf(nid);
+            int result = Shell32.Shell_NotifyIconGetRect(ref nid, out rect);
+
+            Rectangle notifyiconrectangle = Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+
+            return notifyiconrectangle;
+        }
     }
 
     /// <summary>
-    /// dll/mehtod imports from user32.dll
+    /// dll/method imports from user32.dll
     /// </summary>
     static class User32
     {
@@ -88,6 +114,15 @@ namespace avalonprojects.wpf.tray
     }
 
     /// <summary>
+    /// dll/method imports from shell32.dll
+    /// </summary>
+    static class Shell32
+    {
+        [DllImport("Shell32", SetLastError = true)]
+        public static extern Int32 Shell_NotifyIconGetRect([In] ref NOTIFYICONIDENTIFIER identifier, [Out] out RECT iconLocation);
+    }
+
+    /// <summary>
     /// data structure to handle dimensional coordinates
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
@@ -97,6 +132,14 @@ namespace avalonprojects.wpf.tray
         public int top;
         public int right;
         public int bottom;
+    }
+
+    public struct NOTIFYICONIDENTIFIER
+    {
+        public uint cbSize;
+        public IntPtr hWnd;
+        public uint uID;
+        public Guid guidItem;
     }
 
     /// <summary>

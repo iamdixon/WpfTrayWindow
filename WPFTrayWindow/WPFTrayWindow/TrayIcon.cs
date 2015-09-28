@@ -77,6 +77,12 @@ namespace avalonprojects.wpf.tray
         }
 
 
+        public System.Drawing.Rectangle GetNotificationIconRectangle()
+        {
+            return TaskBar.GetNotificationIconRectangle(trayicon);
+        }
+
+
         // make disposable so that tray icon disposition can be triggered
         /// <summary>
         /// Properly dispose of the TrayIcon
